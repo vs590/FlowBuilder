@@ -2,11 +2,12 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import BootstrapVue from "bootstrap-vue";
+import { rtdbPlugin } from "vuefire";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
-
+Vue.use(rtdbPlugin);
 var hours = 1; // session expiry: 1hours
 var now = new Date().getTime();
 var setupTime = localStorage.getItem("setupTime");

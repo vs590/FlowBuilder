@@ -244,12 +244,19 @@
         <CreateCredentials></CreateCredentials>
       </b-modal>
     </b-card>
+    <b-toast
+      id="success-2"
+      variant="success"
+      no-close-button
+      auto-hide-delay
+    >Build Flow Created Successfully</b-toast>
   </div>
 </template>
 
 <script src="https://unpkg.com/vue-form-wizard/dist/vue-form-wizard.js"></script>
 <script>
-import { systems, reports, modules, credentials } from "../assets/data";
+import { systems, reports, modules } from "../assets/data";
+import { db } from "../config/db";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
 import { FormWizard, TabContent } from "vue-form-wizard";
 import CreateCredentials from "./CreateCredentials";
@@ -259,9 +266,13 @@ export default {
       systems: systems,
       reports: reports,
       modules: modules,
-      credentials: credentials,
+      credentials: [],
       selectedAutomationType: null,
       finalObj: {
+        automationID: Math.random()
+          .toString(36)
+          .substring(7),
+        dateCreated: new Date().toLocaleDateString(),
         automationType: this.selectedAutomationType,
         Source: {
           system: null,
@@ -308,7 +319,7 @@ export default {
     getSystems() {
       return this.systems.reduce(
         (arr, data) => {
-          arr.push({ value: data.systemid, text: data.sytemName });
+          arr.push({ value: data.systemid, text: data.systemName });
           return arr;
         },
         [{ value: null, text: "Select any One" }]
@@ -320,7 +331,7 @@ export default {
       return this.modules.reduce(
         (arr, data) => {
           if (data.systemid == this.finalObj[name].system)
-            arr.push({ value: data.moduleID, text: data.modulename });
+            arr.push({ value: data.modulename, text: data.modulename });
           return arr;
         },
         [{ value: null, text: "Select any One" }]
@@ -330,7 +341,7 @@ export default {
       return this.reports.reduce(
         (arr, data) => {
           if (data.systemid == this.finalObj[name].system)
-            arr.push({ value: data.reportID, text: data.reportname });
+            arr.push({ value: data.reportname, text: data.reportname });
           return arr;
         },
         [{ value: null, text: "Select any One" }]
@@ -350,7 +361,23 @@ export default {
       return valid;
     },
     submitForm() {
-      alert(JSON.stringify(this.finalObj));
+      this.finalObj.Source.system = this.systems.find(
+        data => data.systemid == this.finalObj.Source.system
+      ).systemName;
+      if (this.selectedAutomationType == 0) {
+        this.finalObj.Target.system = this.systems.find(
+          data => data.systemid == this.finalObj.Target.system
+        ).systemName;
+        delete this.finalObj.Briq;
+      } else {
+        this.finalObj.Briq.system = this.systems.find(
+          data => data.systemid == this.finalObj.Briq.system
+        ).systemName;
+        delete this.finalObj.Target;
+      }
+      this.finalObj.automationType = this.selectedAutomationType;
+      db.ref("MyAutomations").push(this.finalObj);
+      this.$bvToast.show("success-2");
       this.$router.push({ name: "MyAutomations" });
     },
     allFeildsValid(data) {
@@ -374,6 +401,7 @@ export default {
   },
   created() {
     if (localStorage.getItem("isAuthenticated") == "true") {
+      this.$rtdbBind("credentials", db.ref("credentials"));
       this.show = true;
       this.$emit("updateStatus", {
         isAuthenticated: true,

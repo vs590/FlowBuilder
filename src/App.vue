@@ -1,22 +1,12 @@
 <template>
   <div id="app">
-    <nav
-      v-if="isAuthenticated"
-      class="navbar navbar-light"
-      style="background-color: #e3f2fd;"
-    >
+    <nav v-if="isAuthenticated" class="navbar navbar-light" style="background-color: #e3f2fd;">
       <a class="navbar-brand">Hi {{ userName }}</a>
 
       <b-dropdown id="dropdown-right" right class="m-2">
-        <router-link v-bind:to="{ name: 'MyAutomations' }" class="dropdown-item"
-          >Home</router-link
-        >
-        <router-link v-bind:to="{ name: 'Credentials' }" class="dropdown-item"
-          >Credentials</router-link
-        >
-        <router-link v-bind:to="{ name: 'FlowBuilder' }" class="dropdown-item"
-          >FlowBuilder</router-link
-        >
+        <router-link v-bind:to="{ name: 'MyAutomations' }" class="dropdown-item">Home</router-link>
+        <router-link v-bind:to="{ name: 'Credentials' }" class="dropdown-item">Credentials</router-link>
+        <router-link v-bind:to="{ name: 'FlowBuilder' }" class="dropdown-item">FlowBuilder</router-link>
         <b-dropdown-divider></b-dropdown-divider>
         <a @click="logoutUser()" class="dropdown-item" href="#">Logout</a>
       </b-dropdown>
@@ -25,7 +15,6 @@
     <router-view @updateStatus="updateStatus($event)" />
   </div>
 </template>
-
 <script>
 export default {
   name: "app",

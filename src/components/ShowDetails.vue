@@ -1,10 +1,10 @@
 <template>
-  <b-modal id="modal-1" :title="gettitle" no-close-on-backdrop no-stacking hide-footer>
+  <b-modal id="modal-1" :title="gettitle" scrollable no-close-on-backdrop no-stacking hide-footer>
     <center>
       <h4>Automation Type: {{ getAutomationType }}</h4>
     </center>
     <b-card-group deck>
-      <b-card v-if="!isEmptyOrNull(data.Source)" header="Source">
+      <b-card class="cards-width" v-if="!isEmptyOrNull(data.Source)" header="Source">
         <p>
           <strong>System:</strong>
           {{ data.Source.system }}
@@ -34,7 +34,7 @@
           {{ data.Source.credential }}
         </p>
       </b-card>
-      <b-card v-if="!isEmptyOrNull(data.Target)" header="Target">
+      <b-card class="cards-width" v-if="!isEmptyOrNull(data.Target)" header="Target">
         <p>
           <strong>System:</strong>
           {{ data.Target.system }}
@@ -60,7 +60,7 @@
           {{ data.Target.credential }}
         </p>
       </b-card>
-      <b-card v-if="!isEmptyOrNull(data.Briq)" header="Briq">
+      <b-card class="cards-width" v-if="!isEmptyOrNull(data.Briq)" header="Briq">
         <p>
           <strong>System:</strong>
           {{ data.Briq.system }}
@@ -107,8 +107,18 @@ export default {
   },
   methods: {
     isEmptyOrNull(feild) {
-      return feild == null || Object.keys(feild).length == 0;
+      return (
+        feild == null ||
+        typeof feild == "undefined" ||
+        Object.keys(feild).length == 0
+      );
     }
   }
 };
 </script>
+<style scoped>
+.cards-width {
+  min-width: fit-content;
+  margin-top: 10px;
+}
+</style>

@@ -1,7 +1,7 @@
 export const systems = [
-  { sytemName: "System A", systemid: 1 },
-  { sytemName: "System B", systemid: 2 },
-  { sytemName: "System C", systemid: 3 }
+  { systemName: "System A", systemid: 1 },
+  { systemName: "System B", systemid: 2 },
+  { systemName: "System C", systemid: 3 }
 ];
 export const modules = [
   {
@@ -65,70 +65,5 @@ export const reports = [
     reportID: 6,
     systemid: 3,
     reportname: "Report 6"
-  }
-];
-export const credentials = [
-  {
-    id: 1,
-    username: "test1",
-    email: "test1@vhg.com",
-    company: "jhjhjh",
-    system: "System A"
-  },
-  {
-    id: 2,
-    username: "test2",
-    email: "test2@vhg.com",
-    company: "jhjhjh",
-    system: "System B"
-  }
-];
-export const detailData = [
-  {
-    automationID: 1,
-    automationType: 0,
-    dateCreated: "27/11/2019",
-    Source: {
-      system: "System B",
-      module: "Module 5",
-      report: "",
-      project: "project A",
-      company: "Briq",
-      url: "www.br.iq",
-      credential: "test2"
-    },
-    Target: {
-      system: "System A",
-      module: "Module 1",
-      report: "",
-      project: "project B",
-      company: "Briq",
-      url: "www.br.iq",
-      credential: "test1"
-    },
-    Briq: {}
-  },
-  {
-    automationID: 2,
-    automationType: 1,
-    dateCreated: "26/11/2019",
-    Source: {
-      system: "System C",
-      module: "",
-      report: "Report 3",
-      project: "project C",
-      company: "Briq",
-      url: "www.br.iq",
-      credential: "test1"
-    },
-    Target: {},
-    Briq: {
-      system: "System A",
-      report: "Report 1",
-      project: "project B",
-      company: "Briq",
-      url: "www.br.iq",
-      credential: "test2"
-    }
   }
 ];

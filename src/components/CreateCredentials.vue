@@ -52,14 +52,29 @@
         <b-button type="submit" variant="primary">Create Credentials</b-button>
       </b-form>
     </b-card>
+    <b-toast
+      id="success"
+      variant="success"
+      no-close-button
+      auto-hide-delay
+    >Credentials Created Successfully</b-toast>
+    <b-toast
+      id="error"
+      variant="warning"
+      no-close-button
+      auto-hide-delay
+    >Credentials with this Username Already exists</b-toast>
   </div>
 </template>
 
 <script>
 import { systems } from "../assets/data";
+
+import { db } from "../config/db";
 export default {
   data() {
     return {
+      credentials: [],
       form: {
         username: "",
         password: "",
@@ -76,7 +91,7 @@ export default {
     getSystems() {
       return this.systems.reduce(
         (arr, data) => {
-          arr.push({ value: data.systemid, text: data.sytemName });
+          arr.push({ value: data.systemid, text: data.systemName });
           return arr;
         },
         [{ value: null, text: "Select any One" }]
@@ -86,6 +101,10 @@ export default {
   created() {
     if (localStorage.getItem("isAuthenticated") == "true") {
       this.show = true;
+      this.$rtdbBind("credentials", db.ref("credentials"));
+      this.credentials = this.credentials.map(data => {
+        return data.username;
+      });
       this.$emit("updateStatus", {
         isAuthenticated: true,
         userName: localStorage.getItem("userName")
@@ -97,9 +116,24 @@ export default {
   methods: {
     createCredential(evt) {
       evt.preventDefault();
-      //create credentials
-      alert(JSON.stringify(this.form));
-      if (document.getElementById("modal-1")) this.$bvModal.hide("modal-1");
+      this.form.system = this.systems.find(
+        data => data.systemid == this.form.system
+      ).systemName;
+      if (!this.credentials.includes(this.form.username)) {
+        db.ref("credentials").push(this.form);
+        this.form = {
+          username: "",
+          password: "",
+          email: "",
+          name: "",
+          company: "",
+          system: null
+        };
+        this.$bvToast.show("success");
+        if (document.getElementById("modal-1")) this.$bvModal.hide("modal-1");
+      } else {
+        this.$bvToast.show("error");
+      }
     }
   }
 };

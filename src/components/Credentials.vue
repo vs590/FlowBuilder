@@ -4,18 +4,30 @@
     <b-card class="mt-3" header="CREDENTIALS">
       <b-card-group deck>
         <b-card
+          class="cards-width"
           v-for="(data, index) in credentials"
           :key="index"
           header-text-variant="white"
           align="center"
-          style="max-width: 15rem;"
         >
-          <b-card-text>
+          <b-card-text style="text-align:left !important">
             <div>
-              <p><strong>Username:</strong> {{ data.username }}</p>
-              <p><strong>Email:</strong> {{ data.email }}</p>
-              <p><strong>Company:</strong> {{ data.company }}</p>
-              <p><strong>System:</strong> {{ data.system }}</p>
+              <p>
+                <strong>Username:</strong>
+                {{ data.username }}
+              </p>
+              <p>
+                <strong>Email:</strong>
+                {{ data.email }}
+              </p>
+              <p>
+                <strong>Company:</strong>
+                {{ data.company }}
+              </p>
+              <p>
+                <strong>System:</strong>
+                {{ data.system }}
+              </p>
             </div>
           </b-card-text>
         </b-card>
@@ -26,16 +38,17 @@
 </template>
 <script>
 import CreateCredentials from "./CreateCredentials";
-import { credentials } from "../assets/data";
+import { db } from "../config/db";
 export default {
   data() {
     return {
-      credentials: credentials,
+      credentials: [],
       show: false
     };
   },
   created() {
     if (localStorage.getItem("isAuthenticated") == "true") {
+      this.$rtdbBind("credentials", db.ref("credentials"));
       this.show = true;
       this.$emit("updateStatus", {
         isAuthenticated: true,
@@ -50,3 +63,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+.cards-width {
+  min-width: fit-content;
+  margin-top: 10px;
+}
+</style>

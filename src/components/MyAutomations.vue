@@ -30,12 +30,12 @@
   </div>
 </template>
 <script>
-import { detailData } from "../assets/data";
+import { db } from "../config/db";
 import ShowDetails from "./ShowDetails";
 export default {
   data() {
     return {
-      detailData: detailData,
+      detailData: [],
       show: false,
       selectedData: {}
     };
@@ -59,6 +59,8 @@ export default {
   },
   created() {
     if (localStorage.getItem("isAuthenticated") == "true") {
+      this.$rtdbBind("detailData", db.ref("MyAutomations"));
+
       this.show = true;
       this.$emit("updateStatus", {
         isAuthenticated: true,
